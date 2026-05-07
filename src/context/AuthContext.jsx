@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('pmajay_token');
     localStorage.removeItem('pmajay_user');
 
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch('https://ajay-backend-1.onrender.com/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
