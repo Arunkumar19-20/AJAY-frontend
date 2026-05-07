@@ -5,8 +5,6 @@ const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
-const API_URL = 'https://ajay-backend-1.onrender.com/api/auth/login';
-
 export function AuthProvider({ children }) {
 
   const [user, setUser] = useState(null);
@@ -19,9 +17,13 @@ export function AuthProvider({ children }) {
     const storedToken = localStorage.getItem('pmajay_token');
 
     if (storedUser && storedToken) {
+
       try {
+
         setUser(JSON.parse(storedUser));
+
       } catch (err) {
+
         console.error('Failed to parse stored user:', err);
 
         localStorage.removeItem('pmajay_user');
@@ -38,76 +40,24 @@ export function AuthProvider({ children }) {
 
     try {
 
-      // Clear old data
+      // Clear old auth data
       localStorage.removeItem('pmajay_user');
       localStorage.removeItem('pmajay_token');
 
-      const response = await fetch(API_URL, {
-        method: 'POST',
-
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      // Login request
+      const response = await authAPI.login({
+        email,
+        password,
       });
 
-      // Get raw response text first
-      const text = await response.text();
-
-      let data = {};
-
-      // Safely parse JSON
-      try {
-        data = JSON.parse(text);
-      } catch (err) {
-        console.error('Invalid JSON response:', text);
-        throw new Error('Server returned invalid response');
-      }
-
-      // Handle API errors
-      if (!response.ok) {
-        throw new Error(
-          data.message ||
-          data.error ||
-          'Login failed'
-        );
-      }
+      const userData = response.data;
 
       // Validate token
-      if (!data.token) {
+      if (!userData.token) {
         throw new Error('Token not received from server');
       }
 
       // Save auth data
-      localStorage.setItem('pmajay_token', data.token);
-      localStorage.setItem('pmajay_user', JSON.stringify(data));
-
-      setUser(data);
-
-      return data;
-
-    } catch (err) {
-
-      console.error('LOGIN ERROR:', err);
-
-      throw err;
-    }
-  };
-
-  // REGISTER
-  const register = async (data) => {
-
-    try {
-
-      const res = await authAPI.register(data);
-
-      const userData = res.data;
-
       localStorage.setItem(
         'pmajay_token',
         userData.token
@@ -118,6 +68,44 @@ export function AuthProvider({ children }) {
         JSON.stringify(userData)
       );
 
+      // Update state
+      setUser(userData);
+
+      return userData;
+
+    } catch (err) {
+
+      console.error('LOGIN ERROR:', err);
+
+      throw new Error(
+        err.response?.data?.message ||
+        err.message ||
+        'Login failed'
+      );
+    }
+  };
+
+  // REGISTER
+  const register = async (data) => {
+
+    try {
+
+      const response = await authAPI.register(data);
+
+      const userData = response.data;
+
+      // Save auth data
+      localStorage.setItem(
+        'pmajay_token',
+        userData.token
+      );
+
+      localStorage.setItem(
+        'pmajay_user',
+        JSON.stringify(userData)
+      );
+
+      // Update state
       setUser(userData);
 
       return userData;
@@ -126,15 +114,19 @@ export function AuthProvider({ children }) {
 
       console.error('REGISTER ERROR:', err);
 
-      throw err;
+      throw new Error(
+        err.response?.data?.message ||
+        err.message ||
+        'Registration failed'
+      );
     }
   };
 
   // LOGOUT
   const logout = () => {
 
-    localStorage.removeItem('pmajay_token');
     localStorage.removeItem('pmajay_user');
+    localStorage.removeItem('pmajay_token');
 
     setUser(null);
   };
@@ -153,6 +145,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         loading,
+
         login,
         register,
         logout,
