@@ -22,6 +22,8 @@ import CentreApprovals from './pages/centre/Approvals';
 import CentreAuditLog from './pages/centre/AuditLog';
 import CentreReports from './pages/centre/Reports';
 import CentreUsers from './pages/centre/Users';
+import CentreGISMap from './pages/centre/GISMap';
+import CentreScorecard from './pages/centre/Scorecard';
 
 // State
 import StateDashboard from './pages/state/Dashboard';
@@ -96,6 +98,8 @@ function AppRoutes() {
       <Route path="/centre/agencies" element={<ProtectedRoute allowedRole="CENTRE"><CentreAgencies /></ProtectedRoute>} />
       <Route path="/centre/projects" element={<ProtectedRoute allowedRole="CENTRE"><CentreProjects /></ProtectedRoute>} />
       <Route path="/centre/projects/:id" element={<ProtectedRoute allowedRole="CENTRE"><CentreProjectDetail /></ProtectedRoute>} />
+      <Route path="/centre/gis-map" element={<ProtectedRoute allowedRole="CENTRE"><CentreGISMap /></ProtectedRoute>} />
+      <Route path="/centre/scorecard" element={<ProtectedRoute allowedRole="CENTRE"><CentreScorecard /></ProtectedRoute>} />
       <Route path="/centre/funds" element={<ProtectedRoute allowedRole="CENTRE"><CentreFunds /></ProtectedRoute>} />
       <Route path="/centre/funds/release" element={<ProtectedRoute allowedRole="CENTRE"><CentreFundRelease /></ProtectedRoute>} />
       <Route path="/centre/approvals" element={<ProtectedRoute allowedRole="CENTRE"><CentreApprovals /></ProtectedRoute>} />

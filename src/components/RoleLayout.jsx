@@ -8,7 +8,7 @@ import {
   HiOutlineMenu, HiOutlineX, HiOutlineChevronRight, HiOutlineGlobe,
   HiOutlineDocumentReport, HiOutlineUsers, HiOutlineCheckCircle,
   HiOutlineBell, HiOutlineUpload, HiOutlineUser, HiOutlinePencilAlt,
-  HiOutlineDocumentText,
+  HiOutlineDocumentText, HiOutlineMap, HiOutlineChartSquareBar,
 } from 'react-icons/hi';
 
 const navConfigs = {
@@ -17,6 +17,8 @@ const navConfigs = {
     { path: '/centre/states', label: 'States', icon: HiOutlineGlobe },
     { path: '/centre/agencies', label: 'Agencies', icon: HiOutlineOfficeBuilding },
     { path: '/centre/projects', label: 'Projects', icon: HiOutlineClipboardList },
+    { path: '/centre/gis-map', label: 'GIS Map', icon: HiOutlineMap },
+    { path: '/centre/scorecard', label: 'Scorecard', icon: HiOutlineChartSquareBar },
     { path: '/centre/funds', label: 'Fund Flow', icon: HiOutlineCurrencyRupee },
     { path: '/centre/approvals', label: 'Approvals', icon: HiOutlineCheckCircle },
     { path: '/centre/audit', label: 'Audit Log', icon: HiOutlineShieldCheck },
